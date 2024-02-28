@@ -1,0 +1,246 @@
+*,
+::after,
+::before {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: "Poppins", sans-serif;
+  height: 100vh;
+  font-size: 62.5%;
+}
+
+/*  */
+
+.container {
+  display: flex;
+  flex-direction: column;
+  margin: 2rem 5rem;
+  justify-content: center;
+}
+
+.heading {
+  font-size: 2rem;
+  font-weight: 500;
+}
+
+/* Student add Button */
+
+.add_student {
+  display: flex;
+  align-items: center;
+
+  margin-left: auto;
+  margin-bottom: 1rem;
+  background: white;
+  border: 1px solid black;
+  width: 10rem;
+  padding: 0.8rem 1rem;
+  border-radius: 0.5rem;
+  cursor: pointer;
+}
+.add_student:hover {
+  background: #dddddd;
+}
+.add_student iconify-icon {
+  font-size: 1.5rem;
+  cursor: pointer;
+}
+
+.add_student p {
+  font-size: 1rem;
+  margin-left: 0.4rem;
+  font-weight: 500;
+  color: black;
+}
+/* Student add Button */
+
+/* Form Container */
+.form_container {
+  height: 47rem;
+  overflow-y: auto;
+  background: aliceblue;
+  border-radius: 6px;
+  position: absolute;
+  top: 0;
+  left: 50%;
+  transform: translate(-50%, -50%) scale(0.1);
+  text-align: center;
+  padding: 0 30px 60px;
+  color: #333;
+  visibility: hidden;
+  transition: all 0.4s ease-in-out;
+}
+
+.open-popup {
+  visibility: visible;
+  top: 50%;
+  transform: translate(-50%, -50%) scale(1);
+}
+/* Form Container */
+.heading {
+  text-align: center;
+  font-size: 1.8rem;
+  font-weight: 600;
+  margin-bottom: 3rem;
+}
+
+.close_popup_icon {
+  font-size: 1.6rem;
+  position: absolute;
+  right: 1rem;
+  top: 0.8rem;
+  cursor: pointer;
+}
+
+.label_input {
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 1rem;
+}
+.label_input label {
+  font-size: 0.9rem;
+  text-align: start;
+  font-weight: 500;
+}
+.student_detail {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 2rem;
+  align-items: center;
+  justify-content: center;
+}
+
+.student_detail input {
+  width: 28rem;
+  padding: 10px;
+  margin: 0.1rem 0;
+  /* border: 1px solid #ccc; */
+  border-radius: 4px;
+}
+
+.error_msg {
+  text-align: start;
+  color: red;
+  font-size: 0.8rem;
+  font-weight: 500;
+}
+
+.border_grey {
+  border: 1px solid lightgrey;
+}
+.border_red {
+  border: 1px solid red;
+}
+/* EDUCATION */
+
+.education_plus {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+.education_txt {
+  font-size: 1.8rem;
+  font-weight: 600;
+  margin-bottom: 3rem;
+}
+.plus {
+  font-size: 2rem;
+  color: black;
+}
+
+#remove {
+  font-size: 1.8rem;
+  color: black;
+}
+
+/* TABLE START */
+#dataTable {
+  margin-top: 2rem;
+  width: 100%;
+  border-collapse: collapse;
+  border: 1px solid black;
+  color: black;
+  font-size: 1rem;
+  text-align: center;
+}
+
+#dataTable th,
+#dataTable td {
+  border: 1px solid black;
+  text-align: center;
+}
+
+.dt-layout-row {
+  font-size: 1rem;
+}
+.dt-layout-row button {
+  font-size: 1rem;
+}
+
+#studentTable tr {
+  border: 1px solid #a8e0d8;
+}
+
+.show,
+.edit,
+.delete {
+  font-size: 2rem;
+  padding: 0rem 0.3rem;
+  cursor: pointer;
+}
+/* table end */
+
+.submit_btn {
+  color: black;
+  padding: 0.8rem 1.2rem;
+  background: white;
+  border: 1px solid black;
+
+  border-radius: 0.5rem;
+  font-size: 1rem;
+  margin: 1.5rem auto 0rem auto;
+}
+.submit_btn:hover {
+  background-color: #dddddd;
+  cursor: pointer;
+}
+/* Education Table */
+.educationTable {
+  text-align: center;
+  width: 100%;
+  font-size: 1rem;
+}
+
+.educationTable th,
+td {
+  border-bottom: 1px solid gainsboro;
+  padding: 1rem 1rem;
+}
+
+.educationTable input {
+  padding: 0.5rem;
+  border-radius: 0.5rem;
+  width: 12rem;
+  margin: auto;
+}
+/* Message */
+.message_container {
+  position: absolute;
+  background-color: rgb(108, 211, 154);
+  color: white;
+  display: flex;
+  z-index: 1;
+  width: 20rem;
+  height: 3rem;
+  border-radius: 0.5rem;
+  display: none;
+  font-size: 1rem;
+  padding: 0.7rem 0.8rem;
+  justify-content: center;
+  align-items: center;
+  top: 1rem;
+  right: 3rem;
+}
