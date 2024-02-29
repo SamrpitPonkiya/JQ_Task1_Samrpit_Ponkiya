@@ -257,21 +257,18 @@ $(document).ready(function () {
     let emailReg =
       /^(([^<>()[\]\.,;:\s@\"]+(\.[^<>()[\]\.,;:\s@\"]+)*)|(\".+\"))@(([^<>()[\]\.,;:\s@\"]+\.)+[^<>()[\]\.,;:\s@\"]{2,})$/i;
     let letterReg = /^[a-z]+$/i;
-    let textInputs = $(".character");
 
-    textInputs.each(function () {
-      if (!letterReg.test($(this).val()) && $(this).val() != "") {
-        $(this).next().text("Invalid input");
-        $(this).removeClass("border_grey");
-        $(this).addClass("border_red");
-        isValid = false;
-      } else if ($(this).val().length < 3 && $(this).val() != "") {
-        $(this).next().text("minimum 3 character required");
-        $(this).removeClass("border_grey");
-        $(this).addClass("border_red");
-        isValid = false;
-      }
-    });
+    if (!letterReg.test($("#fname").val()) && $("#fname").val() != "") {
+      $("#fname").next().text("Invalid input");
+      $("#fname").removeClass("border_grey");
+      $("#fname").addClass("border_red");
+      isValid = false;
+    } else if ($("#fname").val().length < 3 && $("#fname").val() != "") {
+      $("#fname").next().text("minimum 3 character required");
+      $("#fname").removeClass("border_grey");
+      $("#fname").addClass("border_red");
+      isValid = false;
+    }
 
     if (!emailReg.test(email.val())) {
       email.next().text("Email is not valid");
@@ -297,6 +294,25 @@ $(document).ready(function () {
       dateOfBirth.addClass("border_red");
       dateOfBirth.next().text("Minimum age is 18 required");
     }
+    // Degree School VAlidation
+
+    let degreeSchoolReg = /^[a-zA-Z\s-]*$/;
+    let degreeSchoolInput = $(".degreeSchool");
+    // console.log(degreeSchoolInput);
+    degreeSchoolInput.each(function () {
+      if (!degreeSchoolReg.test($(this).val()) && $(this).val() != "") {
+        $(this).next().text("Invalid Input");
+        $(this).removeClass("border_grey");
+        $(this).addClass("border_red");
+        isValid = false;
+      } else if ($(this).val().length < 6 && $(this).val() != "") {
+        console.log("ok");
+        $(this).next().text("Invalid Input");
+        $(this).removeClass("border_grey");
+        $(this).addClass("border_red");
+        isValid = false;
+      }
+    });
 
     // Start date passout date validation
     let ind = 8;
@@ -362,7 +378,6 @@ $(document).ready(function () {
     currentDate.getFullYear() +
     "-" +
     ("0" + (currentDate.getMonth() + 1)).slice(-2);
-
   let startDate = $(".start_date");
   startDate.attr("max", yearMonth);
 
