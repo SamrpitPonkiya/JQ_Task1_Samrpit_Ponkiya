@@ -16,6 +16,7 @@ body {
 
 .container {
   display: flex;
+  overflow-x: auto;
   flex-direction: column;
   margin: 2rem 5rem;
   justify-content: center;
@@ -182,6 +183,16 @@ body {
 
 #studentTable tr {
   border: 1px solid #a8e0d8;
+}
+
+td.details-control {
+  background: url("https://datatables.net/examples/resources/details_open.png")
+    no-repeat center center;
+  cursor: pointer;
+}
+tr.shown td.details-control {
+  background: url("https://datatables.net/examples/resources/details_close.png")
+    no-repeat center center;
 }
 
 .show,

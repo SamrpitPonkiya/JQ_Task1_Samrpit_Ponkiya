@@ -1,9 +1,4 @@
 $(document).ready(function () {
-  $("#dataTable").DataTable({
-    paging: true,
-    searching: true,
-    pagingType: "simple_numbers",
-  });
   let body = $("body"),
     studentForm = $("#studentForm"),
     dateOfBirth = $("#dob"),
@@ -25,7 +20,27 @@ $(document).ready(function () {
     student = array[tempIndex],
     fieldCount = 2,
     isValid = true,
-    isEdit = false;
+    isEdit = false,
+    isDeleted = false;
+
+  let mainTable = $("#dataTable").DataTable({
+    columns: [
+      {
+        className: "details-control",
+        orderable: false,
+        data: null,
+        defaultContent: "",
+      },
+      { data: "studentId" },
+      { data: "fname" },
+      { data: "lname" },
+      { data: "dob" },
+      { data: "email" },
+      { data: "address" },
+      { data: "gradyear" },
+      { data: "action" },
+    ],
+  });
 
   // Pop-up-form function
   $(document).on("click", ".add_student", function () {
@@ -106,7 +121,6 @@ $(document).ready(function () {
     e.preventDefault(); // Prevent default anchor behavior
     student = array[tempIndex];
     if (isEdit) {
-      console.log("okj");
       let row = $(this).closest("tr");
       if (!row.next().length == 0) {
         alert("Please Delete last row first");
@@ -139,43 +153,87 @@ $(document).ready(function () {
     }
   });
 
-  // Show data in table---------------------------------------
+  //Main Table Data---------------------------------
   function showData() {
-    $("#dataTable").DataTable().clear();
+    mainTable.clear().draw();
+    let actionButtons =
+      '<iconify-icon class="show" icon="mdi:eye"></iconify-icon>' +
+      '<iconify-icon class="edit"  icon="mingcute:edit-line"></iconify-icon>' +
+      '<iconify-icon class="delete"  icon="mdi:trash"></iconify-icon>';
     $.each(array, function (index, student) {
-      let studentDob = student.dob;
-      let parts = studentDob.split("-");
-      let formatted_date = parts[2] + "-" + parts[1] + "-" + parts[0];
-      let actionButtons =
-        '<iconify-icon class="show" icon="mdi:eye"></iconify-icon>' +
-        '<iconify-icon class="edit"  icon="mingcute:edit-line"></iconify-icon>' +
-        '<iconify-icon class="delete"  icon="mdi:trash"></iconify-icon>';
-      let rowData = [
-        student.studentId,
-        student.fname,
-        student.lname,
-        formatted_date,
-        student.email,
-        student.address,
-        student.gradyear,
-        actionButtons,
-      ];
-      $("#dataTable").DataTable().row.add(rowData);
+      if (student.isDeleted) {
+      } else {
+        let Eduaction = [];
+        for (let i = 1; i <= student.studentFieldCount; i++) {
+          let eduObj = {
+            degree: student["degree" + i],
+            school: student["school" + i],
+            startDate: student["start_date" + i],
+            passoutDate: student["passout_date" + i],
+            percentage: student["percentage" + i],
+            backlog: student["backlog" + i],
+          };
+          Eduaction.push(eduObj);
+        }
+        let obj = {
+          studentId: student.studentId,
+          fname: student.fname,
+          lname: student.lname,
+          dob: student.dob,
+          email: student.email,
+          address: student.address,
+          gradyear: student.gradyear,
+          action: actionButtons,
+          details: Eduaction,
+        };
+        mainTable.row.add(obj).draw();
+      }
     });
-    $("#dataTable").DataTable().draw();
   }
+
+  // opening and closing details Of Child Table-----------------------------------------------
+  $("#dataTable tbody").on("click", "td.details-control", function () {
+    let tr = $(this).closest("tr");
+    let row = mainTable.row(tr);
+    if (row.child.isShown()) {
+      row.child.hide();
+      tr.removeClass("shown");
+    } else {
+      let rowData = row.data();
+      let childTable = $(
+        '<table class="nested-table" cellpadding="5" cellspacing="0" border="0"></table>'
+      );
+      var headerRow = $(
+        "<thead><tr><th>Degree/School</th><th>School/College</th><th>Start Date</th><th>Passout Date</th><th>Percentage</th><th>Backlog</th></tr></thead>"
+      );
+      childTable.append(headerRow);
+      row.child(childTable).show();
+      childTable.DataTable({
+        columns: [
+          { data: "degree" },
+          { data: "school" },
+          { data: "startDate" },
+          { data: "passoutDate" },
+          { data: "percentage" },
+          { data: "backlog" },
+        ],
+        data: rowData.details,
+        paging: false,
+        searching: false,
+      });
+      tr.addClass("shown");
+    }
+  });
 
   // Edit Student Details -------------------------------
   $("#dataTable").on("click", ".edit", function (e) {
     e.preventDefault();
     openPopup();
     isEdit = true;
-    let studentId = $(this).closest("tr").children().eq(0).text();
-
+    let studentId = $(this).closest("tr").children().eq(1).text();
     let studentIndex = array.findIndex((s) => s.studentId == studentId);
     tempIndex = studentIndex;
     let student = array[studentIndex];
-
     fieldCount = student.studentFieldCount;
     if (student.studentFieldCount > 2) {
       for (let i = 0; i < student.studentFieldCount - 2; i++) {
@@ -195,9 +253,9 @@ $(document).ready(function () {
   $("#dataTable").on("click", ".show", function (e) {
     e.preventDefault();
     openPopup();
-    let studentId = $(this).closest("tr").children().eq(0).text();
+    let studentId = $(this).closest("tr").children().eq(1).text();
     let studentIndex = array.findIndex((s) => s.studentId == studentId);
-    let student = array[studentIndex];
+    student = array[studentIndex];
     let removeFieldBtn = $("#remove_btn");
     removeFieldBtn.css("visibility", "hidden");
     addFieldBtn.css("display", "none");
@@ -222,13 +280,10 @@ $(document).ready(function () {
   // Delete student data -----------------------------------
   $("#dataTable").on("click", ".delete", function (e) {
     e.preventDefault();
-    let studentId = $(this).closest("tr").children().eq(0).text();
+    let studentId = $(this).closest("tr").children().eq(1).text();
     let studentIndex = array.findIndex((s) => s.studentId == studentId);
-
-    array.splice(studentIndex, 1);
-    message.html(
-      `<iconify-icon icon="ep:success-filled"></iconify-icon> Student successfully added`
-    );
+    student = array[studentIndex];
+    student.isDeleted = true;
     messages("Student Deleted Successfully");
     showData();
   });
@@ -306,7 +361,6 @@ $(document).ready(function () {
         $(this).addClass("border_red");
         isValid = false;
       } else if ($(this).val().length < 6 && $(this).val() != "") {
-        console.log("ok");
         $(this).next().text("Invalid Input");
         $(this).removeClass("border_grey");
         $(this).addClass("border_red");
@@ -393,9 +447,10 @@ $(document).ready(function () {
         const information = {
           studentId: sId,
           studentFieldCount: fieldCount,
+          isDeleted: isDeleted,
         };
-        let inputs = $(".label_input input");
-        inputs.each(function () {
+        let studentInputs = $("#studentForm input");
+        studentInputs.each(function () {
           let key = $(this).attr("id");
           let value = $(this).val();
           information[key] = value;
@@ -406,7 +461,7 @@ $(document).ready(function () {
       } else {
         student = array[tempIndex];
         student.studentFieldCount = fieldCount;
-        let inputs = $(".label_input input");
+        let inputs = $("#studentForm input");
         inputs.each(function () {
           let name = $(this).attr("id");
           student[name] = $(this).val();
